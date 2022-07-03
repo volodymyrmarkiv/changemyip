@@ -51,8 +51,10 @@ if [[ $1 == "enable" ]] || [[ $1 == "--enable" ]] || [[ $1 == "-e" ]]; then
     publicIpAddress=$(python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["publicIpAddress"])' < /tmp/publicIpAddress_$random)
 
     echo "SOCKS5 server is running. Don't forget to set up your browser."
+    echo "Recommended browser - Mozilla Firefox https://www.mozilla.org"
+    echo "Recommended browser addon - FoxyProxy https://getfoxyproxy.org"
     echo ""
-    ssh -o StrictHostKeyChecking=no UserKnownHostsFile=/dev/null -D 9999 -i "$temporarySshKey" "$azureUser"@"$publicIpAddress"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -D 9999 -i "$temporarySshKey" "$azureUser"@"$publicIpAddress"
 
 elif [[ $1 == "disable" ]] || [[ $1 == "--disable" ]] || [[ $1 == "-d" ]]; then
     echo -e "$yellow Resources in the $resourceGroup resource group are going to be destroyed in 10 seconds.$colorOff"
