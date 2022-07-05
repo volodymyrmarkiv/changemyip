@@ -10,6 +10,7 @@ publicIpSku="Standard"
 random=$RANDOM
 temporarySshKey="$HOME/.ssh/azure_temporary_ssh_key"
 azureUser="azureuser"
+azVmCreateOutput="/tmp/publicIpAddress_$random"
 
 # Colors
 colorOff='\033[0m'
@@ -38,7 +39,7 @@ if [[ $1 == "enable" ]] || [[ $1 == "--enable" ]] || [[ $1 == "-e" ]]; then
     --admin-username "$azureUser" \
     --ssh-key-values "$temporarySshKey".pub \
     --encryption-at-host true \
-    --public-ip-sku "$publicIpSku" > /tmp/publicIpAddress_$random
+    --public-ip-sku "$publicIpSku" > "$azVmCreateOutput"
     echo -e "$green Virtual Machine has been created successfully.$colorOff"
     
     echo -e "$green All required resources have been created successfully.$colorOff"
@@ -48,7 +49,11 @@ if [[ $1 == "enable" ]] || [[ $1 == "--enable" ]] || [[ $1 == "-e" ]]; then
     echo " Before executing '$0 disable' be sure that you don't have any important manually created resources in the $resourceGroup resource group."
 
     # Parse json and map publicIpAddress value to a variable
-    publicIpAddress=$(python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["publicIpAddress"])' < /tmp/publicIpAddress_$random)
+    if [[ $(which jq) != "jq not found" ]]; then
+        publicIpAddress=$(jq -j '.publicIpAddress' < "$azVmCreateOutput")
+    else
+        publicIpAddress=$(python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["publicIpAddress"])' < "$azVmCreateOutput")
+    fi
 
     echo "SOCKS5 server is running. Don't forget to set up your browser."
     echo "Recommended browser - Mozilla Firefox https://www.mozilla.org"
