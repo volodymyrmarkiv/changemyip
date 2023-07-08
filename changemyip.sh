@@ -4,7 +4,7 @@ subscription="Visual Studio Professional Subscription"
 resourceGroup="change-my-ip-eastus-rg"
 location="eastus"
 vmName="change-my-ip-eastus-debian-vm" 
-image="Debian"
+image="Debian11"
 size="Standard_B1ls"
 publicIpSku="Standard"
 random=$RANDOM
@@ -16,6 +16,35 @@ colorOff='\033[0m'
 red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
+
+# TODO
+# 1. az login -> get active subscription
+#   {
+#     "cloudName": "AzureCloud",
+#     "homeTenantId": "xxxxxxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxxxx",
+#     "id": "f6b61c58-e42e-4ddb-9bfc-efc2eec69263",
+#     "isDefault": true,
+#     "managedByTenants": [],
+#     "name": "Visual Studio Professional Subscription",
+#     "state": "Enabled",
+#     "tenantId": "xxxxxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxxxx",
+#     "user": {
+#       "name": "user_name@email.com",
+#       "type": "user"
+#     }
+#   },
+
+# 2. az feature register --namespace "Microsoft.Compute" --name "EncryptionAtHost"
+# {
+#   "id": "/subscriptions/xxxxxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxxxx/providers/Microsoft.Features/providers/Microsoft.Compute/features/EncryptionAtHost",
+#   "name": "Microsoft.Compute/EncryptionAtHost",
+#   "properties": {
+#     "state": "Registering"
+#   },
+#   "type": "Microsoft.Features/providers/features"
+# }
+
+
 
 if [[ $1 == "enable" ]] || [[ $1 == "--enable" ]] || [[ $1 == "-e" ]]; then
     # Create temporary ssh key without answearing questions
